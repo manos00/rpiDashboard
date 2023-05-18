@@ -6,3 +6,4 @@ ZeroW/out*
 ZeroW/dashboardZero/
 ZeroW/tankstellen.json
 ZeroW/credentials.json
+*.key

@@ -6,7 +6,7 @@ import sqlite3
 import datetime
 
 
-TANKERKOENIG_API_KEY = '552c685f-b0fd-20b9-9034-88f04425eaeb'
+TANKERKOENIG_API_KEY = open('tankerkoenigapi.key' ,'r').read()
 
 with open('tankstellen.json', 'r') as t:
     j = t.read()
