@@ -1,0 +1,7 @@
+push.sh
+NanoW/__pycache__/
+ZeroW/__pycache__/
+ZeroW/in*
+ZeroW/out*
+ZeroW/dashboardZero/
+ZeroW/tankstellen.json
