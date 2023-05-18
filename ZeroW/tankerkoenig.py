@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import sqlite3
 import datetime
 
+
 TANKERKOENIG_API_KEY = '552c685f-b0fd-20b9-9034-88f04425eaeb'
 
 with open('tankstellen.json', 'r') as t:
