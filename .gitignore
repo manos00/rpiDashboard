@@ -6,4 +6,6 @@ ZeroW/out*
 ZeroW/dashboardZero/
 ZeroW/tankstellen.json
 ZeroW/credentials.json
+ZeroW/sprit.db
+ZeroW/e5.png
 *.key
