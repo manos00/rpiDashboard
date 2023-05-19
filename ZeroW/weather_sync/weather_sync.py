@@ -2,7 +2,7 @@ import requests
 
 WEATHER_API_KEY = open('weatherapi.key' ,'r').read()
 
-def update_weather():
+def getWeather():
     data = requests.get(f'https://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q=Caan&aqi=no')
     j = data.json()
     temp_c = j.get('current').get('temp_c')
