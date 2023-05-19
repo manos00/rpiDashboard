@@ -3,8 +3,8 @@ ZeroW/dashboardZero/
 ZeroW/image_conversion/in*
 ZeroW/image_conversion/out*
 *.json
-*/sprit.db
-*/e5.png
+ZeroW/gas_station_display/sprit.db
+ZeroW/gas_station_display/e5.png
 */token.json
 *.key
 */main.py
