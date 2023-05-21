@@ -5,7 +5,8 @@ ZeroW/image_conversion/out*
 *.json
 ZeroW/gas_station_display/sprit.db
 ZeroW/gas_station_display/e5.png
+ZeroW/formattedData.txt
 */token.json
 *.key
-*/main.py
+# */main.py
 *test*

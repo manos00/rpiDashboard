@@ -4,17 +4,19 @@ import requests
 import matplotlib.pyplot as plt
 import sqlite3
 import datetime
+from pathlib import Path
 
+fileDir = Path(__file__).parent.resolve()
 
 def update_prices():
-    TANKERKOENIG_API_KEY = open('tankerkoenigapi.key' ,'r').read()
+    TANKERKOENIG_API_KEY = open(f'{fileDir}/tankerkoenigapi.key' ,'r').read()
 
-    with open('tankstellen.json', 'r') as t:
+    with open(f'{fileDir}/tankstellen.json', 'r') as t:
         j = t.read()
         tankstellen = json.loads(j)
         t.close()
 
-    conn = sqlite3.connect('sprit.db')
+    conn = sqlite3.connect(f'{fileDir}/sprit.db')
     c = conn.cursor()
 
     try:
@@ -50,8 +52,8 @@ def update_prices():
     return
 
 
-def draw_graph(out='e5.png'):
-    conn = sqlite3.connect('sprit.db')
+def draw_graph(out=f'{fileDir}/e5.png'):
+    conn = sqlite3.connect(f'{fileDir}/sprit.db')
     c = conn.cursor()
     stamps = []
     fig, ax = plt.subplots(constrained_layout=True)

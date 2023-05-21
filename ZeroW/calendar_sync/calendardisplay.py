@@ -8,11 +8,13 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from pathlib import Path
 
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
+fileDir = Path(__file__).parent.resolve()
 
 def getEvents():
     creds = None
@@ -20,8 +22,8 @@ def getEvents():
     # created automatically when the authorization flow completes for the first
     # time.
     try:
-        os.stat('token.json')
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        os.stat(f'{fileDir}/token.json')
+        creds = Credentials.from_authorized_user_file(f'{fileDir}/token.json', SCOPES)
     except OSError:
         creds = False
     # If there are no (valid) credentials available, let the user log in.
@@ -30,10 +32,10 @@ def getEvents():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                f'{fileDir}/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run 
-        with open('token.json', 'w') as token:
+        with open(f'{fileDir}/token.json', 'w') as token:
             token.write(creds.to_json())
 
     try:
@@ -52,24 +54,27 @@ def getEvents():
         print('An error occurred: %s' % error)
 
 
-def prettyPrint(event):
-    start = event['start'].get('dateTime', event['start'].get('date'))
-    if 'T' in start:
-        eventTime = start.split('T')
-        eventTime = eventTime[1].split('+')[0]
-    else:
-        eventTime = start.split('-')
-        eventTime = f'{eventTime[2]}-{eventTime[1]}-{eventTime[0][-2:]}'
-    print(eventTime + ' | ' + event['summary'])
-
+def formatEvents(events: list):
+    eventstr = ''
+    for index, event in enumerate(events):
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        if 'T' in start:
+            eventTime = start.split('T')
+            eventTime = eventTime[1].split('+')[0]
+        else:
+            eventTime = start.split('-')
+            eventTime = f'{eventTime[2]}-{eventTime[1]}-{eventTime[0][-2:]}'
+        eventstr += eventTime + ' | ' + event['summary']
+        if index < 2:
+            eventstr += '\n'
+    return eventstr
 
 def main():
     events = getEvents()
     if not events:
         print('No events scheduled for today.')
     else:
-        for event in events:
-            prettyPrint(event)
+        formatEvents(events)
 
 if __name__ == '__main__':
     main()
