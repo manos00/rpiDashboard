@@ -103,6 +103,7 @@ if __name__ == '__main__':
     if exists(f'{fileDir}/count.txt'):
         with open(f'{fileDir}/count.txt', 'r+') as f:
             count = int(f.read())
+            f.truncate(0)
             f.write(str((count+1)%60))
     else:
         with open(f'{fileDir}/count.txt', 'w') as f:
