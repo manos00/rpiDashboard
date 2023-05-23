@@ -4,7 +4,7 @@ from weather_sync.weather_sync import getWeather
 from image_conversion.img_to_bytearray import convert
 from date_sync import update_date
 import socket
-from os.path import getsize
+from os.path import getsize, exists
 from os import SEEK_END
 from time import sleep
 from pathlib import Path
@@ -96,8 +96,20 @@ def main(hourly=False):
 
 
 if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser(description='Format and send dashboard data to PicoW.')
-    parser.add_argument('--hourly', action='store_true')
-    args = parser.parse_args()
-    main(hourly=args.hourly)
+    # import argparse
+    # parser = argparse.ArgumentParser(description='Format and send dashboard data to PicoW.')
+    # parser.add_argument('--hourly', action='store_true')
+    # args = parser.parse_args()
+    if exists('count.txt'):
+        with open('count.txt', 'r+') as f:
+            count = int(f.read())
+            f.write(str((count+1)%60))
+    else:
+        with open('count.txt', 'w') as f:
+            f.write('0')
+            count = 0
+    if count == 0:
+        hourly = True
+    else:
+        hourly = False
+    main(hourly=hourly)
