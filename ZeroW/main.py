@@ -101,10 +101,11 @@ if __name__ == '__main__':
     # parser.add_argument('--hourly', action='store_true')
     # args = parser.parse_args()
     if exists(f'{fileDir}/count.txt'):
-        with open(f'{fileDir}/count.txt', 'r+') as f:
-            count = int(f.read().strip())
+        with open(f'{fileDir}/count.txt', 'r') as f:
+            count = f.read()
+        with open(f'{fileDir}/count.txt', 'w') as f:
             f.truncate(0)
-            f.write(str((count+1)%60))
+            f.write(f'{(int(count)+1)%60}')
     else:
         with open(f'{fileDir}/count.txt', 'w') as f:
             f.write('0')
