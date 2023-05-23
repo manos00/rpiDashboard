@@ -1,8 +1,6 @@
 import PicoEPaper
 import manageWLAN
 from machine import Timer
-from urllib import urequest
-from ujson import loads
 from math import floor
 import ntptime
 import gc
@@ -15,11 +13,11 @@ manageWLAN.connectWLAN(ssid, password)
 ntptime.host = '1.europe.pool.ntp.org'
 ntptime.settime()
 
-def updateDate():
-    weekdays = {0: 'Mon', 1: 'Tue', 2: 'Wed', 3: 'Thu', 4: 'Fri', 5: 'Sat', 6: 'Sun'}
-    ctime = utime.localtime(utime.time()+2*60*60)
-    datestr = "{}, {:02d}.{:02d}.{} {:02d}:{:02d}".format(weekdays.get(ctime[6]), ctime[2], ctime[1], ctime[0], ctime[3], ctime[4])
-    return datestr
+# def updateDate():
+#     weekdays = {0: 'Mon', 1: 'Tue', 2: 'Wed', 3: 'Thu', 4: 'Fri', 5: 'Sat', 6: 'Sun'}
+#     ctime = utime.localtime(utime.time()+2*60*60)
+#     datestr = "{}, {:02d}.{:02d}.{} {:02d}:{:02d}".format(weekdays.get(ctime[6]), ctime[2], ctime[1], ctime[0], ctime[3], ctime[4])
+#     return datestr
 
 
 def center_x(str: str):
@@ -78,21 +76,21 @@ def main(*kwargs):
     epd.image4Gray.fill(0xff)
     # Declaring height var
     y = 5
-    # Updating datetime and writing to display buffer
-    datestr = updateDate()
-    epd.image4Gray.text(datestr, center_x(datestr), y, epd.black)
-    y += 16
     # Drawing horizontal line below date
     epd.image4Gray.hline(0, y, 280, epd.black)
 
     with open('formattedData.txt', 'r') as f:
         lines = f.readlines()
-        for line in lines:
+        for i, line in enumerate(lines):
             if line.strip() == '<HLINE>':
                 epd.image4Gray.hline(0, y, 280, epd.black)
                 y += 8
             else:
-                epd.image4Gray.text(line.strip(), 4, y, epd.black)
+                if i == 0:
+                    x = center_x(line)
+                else:
+                    x = 4
+                epd.image4Gray.text(line.strip(), x, y, epd.black)
                 y += 16
     with open('out', 'rb') as f:
         graph = f.read()
@@ -114,21 +112,12 @@ def every_minute(*kwargs):
     main()
     return 
 
-def every_hour(*kwargs):
-    return
-
-
 # reset uptime.tmp file on reboot
 with open('uptime.tmp', 'w') as f:
     t = utime.time()
     f.write(str(t))
     f.close()
 # update everything on boot (timer first executes methods after the first period of time has passed)
-# every_hour()
 every_minute()
-# Execute main() every 60000 milliseconds / every minute
+# Recieve and display data every 60000 milliseconds / every minute
 timMin.init(period=60_000, mode=Timer.PERIODIC, callback=every_minute)
-# Update weather info every 3600000 milliseconds / every hour
-# timHour.init(period=3_600_000, mode=Timer.PERIODIC, callback=every_hour)
-# # Free memory every 1800000 milliseconds / every 30 minutes
-# timGarbage.init(period=1_800_000, mode=Timer.PERIODIC, callback=garbagecollection)
