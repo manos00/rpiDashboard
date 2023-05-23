@@ -56,8 +56,6 @@ def recieve():
 
 
 timMin = Timer()
-timHour = Timer()
-timGarbage = Timer()
 
 def update_uptime():
     with open('uptime.tmp', 'r') as f:

@@ -102,7 +102,7 @@ if __name__ == '__main__':
     # args = parser.parse_args()
     if exists(f'{fileDir}/count.txt'):
         with open(f'{fileDir}/count.txt', 'r+') as f:
-            count = int(f.read())
+            count = int(f.read().strip())
             f.truncate(0)
             f.write(str((count+1)%60))
     else:
