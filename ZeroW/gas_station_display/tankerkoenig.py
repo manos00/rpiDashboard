@@ -57,7 +57,6 @@ def draw_graph(out=f'{fileDir}/e5.png'):
     c = conn.cursor()
     stamps = []
     fig, ax = plt.subplots(constrained_layout=True)
-    ax.set_title('E5 Preise JET Bendorf')
         # if :
         # now = now.strftime('%B %Y')
         # else:
@@ -74,6 +73,7 @@ def draw_graph(out=f'{fileDir}/e5.png'):
 
     conn.close()
 
+    ax.set_title(f'E5 Jet Bendorf (currently {prices[-1]}€)')
     ax.set_xticks([stamps[0], stamps[-1]])
     ax.set_xticklabels([datetime.datetime.fromtimestamp(stamps[0]).strftime('%B %Y'), datetime.datetime.fromtimestamp(stamps[-1]).strftime('%B %Y')])
     plt.margins(0,0)
