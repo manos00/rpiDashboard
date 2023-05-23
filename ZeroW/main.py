@@ -100,12 +100,12 @@ if __name__ == '__main__':
     # parser = argparse.ArgumentParser(description='Format and send dashboard data to PicoW.')
     # parser.add_argument('--hourly', action='store_true')
     # args = parser.parse_args()
-    if exists('count.txt'):
-        with open('count.txt', 'r+') as f:
+    if exists(f'{fileDir}/count.txt'):
+        with open(f'{fileDir}/count.txt', 'r+') as f:
             count = int(f.read())
             f.write(str((count+1)%60))
     else:
-        with open('count.txt', 'w') as f:
+        with open(f'{fileDir}/count.txt', 'w') as f:
             f.write('0')
             count = 0
     if count == 0:
