@@ -78,7 +78,8 @@ def main(hourly=False):
     sleep(5)
 
     # convert generated gas prices graph to bytes and send it to the pico
-    convert('gas_station_display/e5.png')
+    if hourly:
+        convert('gas_station_display/e5.png')
     for i in range(15):
         try:
             send('image_conversion/out')
