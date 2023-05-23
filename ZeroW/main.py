@@ -7,6 +7,9 @@ import socket
 from os.path import getsize
 from os import SEEK_END
 from time import sleep
+from pathlib import Path
+
+fileDir = Path(__file__).parent.resolve()
 
 def send(file=None):
     SEPARATOR = "<SEPARATOR>"
@@ -44,19 +47,19 @@ def updateNformat(hourly=False):
         draw_graph()
         info.append(weatherstr)
     else:
-        with open('formattedData.txt', 'r') as f:
+        with open(f'{fileDir}/formattedData.txt', 'r') as f:
             c = f.readlines()
             weatherstr = ''.join(c[2:7])
             info.append(weatherstr[:-1])
     info.append(eventstr)
     # clear data from file
-    open('formattedData.txt', 'w').truncate(0)
+    open(f'{fileDir}/formattedData.txt', 'w').truncate(0)
     # write data to text file
     for str in info:
-        with open('formattedData.txt', 'a') as f:
+        with open(f'{fileDir}/formattedData.txt', 'a') as f:
             f.write(f'{str}\n<HLINE>\n')
     # delete last newline
-    with open('formattedData.txt', 'rb+') as f:
+    with open(f'{fileDir}/formattedData.txt', 'rb+') as f:
         f.seek(-1, SEEK_END)
         f.truncate()
 
@@ -66,7 +69,7 @@ def main(hourly=False):
     # send data to pico
     for i in range(15):
         try:
-            send('formattedData.txt')
+            send(f'{fileDir}/formattedData.txt')
             break
         except ConnectionRefusedError as error:
             print(error)
