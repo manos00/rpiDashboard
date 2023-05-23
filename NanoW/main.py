@@ -74,8 +74,6 @@ def main(*kwargs):
     epd.image4Gray.fill(0xff)
     # Declaring height var
     y = 5
-    # Drawing horizontal line below date
-    epd.image4Gray.hline(0, y, 280, epd.black)
 
     with open('formattedData.txt', 'r') as f:
         lines = f.readlines()
