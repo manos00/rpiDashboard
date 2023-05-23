@@ -2,9 +2,10 @@ from calendar_sync.calendardisplay import getEvents, formatEvents
 from gas_station_display.tankerkoenig import update_prices, draw_graph
 from weather_sync.weather_sync import getWeather
 from image_conversion.img_to_bytearray import convert
-# from date_sync import update_date
+from date_sync import update_date
 import socket
 from os.path import getsize
+from os import SEEK_END
 from time import sleep
 
 def send(file=None):
@@ -31,43 +32,68 @@ def send(file=None):
             s.sendall(bytes_read)
     s.close()
 
-# execute methods to get data
-# datestr = update_date()
-weatherstr = getWeather()
-calendarEvents = getEvents()
-eventstr = formatEvents(calendarEvents)
-update_prices()
-draw_graph()
+def updateNformat(hourly=False):
+    # execute methods to get data 
+    datestr = update_date()
+    calendarEvents = getEvents()
+    eventstr = formatEvents(calendarEvents)
+    info = [datestr]
+    if hourly:
+        weatherstr = getWeather()
+        update_prices()
+        draw_graph()
+        info.append(weatherstr)
+    else:
+        with open('formattedData.txt', 'r') as f:
+            c = f.readlines()
+            weatherstr = ''.join(c[2:7])
+            info.append(weatherstr[:-1])
+    info.append(eventstr)
+    # clear data from file
+    open('formattedData.txt', 'w').truncate(0)
+    # write data to text file
+    for str in info:
+        with open('formattedData.txt', 'a') as f:
+            f.write(f'{str}\n<HLINE>\n')
+    # delete last newline
+    with open('formattedData.txt', 'rb+') as f:
+        f.seek(-1, SEEK_END)
+        f.truncate()
 
-# clear data from file
-open('formattedData.txt', 'w').truncate(0)
 
-# write data to text file
-for str in [weatherstr, eventstr]: # datestr
-    with open('formattedData.txt', 'a') as f:
-        f.write(f'\n{str}\n<HLINE>')
-        f.close()
+def main(hourly=False):
+    updateNformat(hourly=hourly)
+    # send data to pico
+    for i in range(15):
+        try:
+            send('formattedData.txt')
+            break
+        except ConnectionRefusedError as error:
+            print(error)
+            sleep(1)
+            if i == 14:
+                print('bruh moment')
+                exit(1)
 
-# send data to pico
-for i in range(15):
-    try:
-        send('formattedData.txt')
-        break
-    except ConnectionRefusedError as error:
-        print(error)
-        sleep(1)
-        if i == 14:
-            print('bruh moment')
-            exit()
+    sleep(5)
 
-sleep(5)
+    # convert generated gas prices graph to bytes and send it to the pico
+    convert('gas_station_display/e5.png')
+    for i in range(15):
+        try:
+            send('image_conversion/out')
+            break
+        except ConnectionRefusedError as error:
+            print(error)
+            sleep(1)
+            if i == 14:
+                print('bruh moment 2')
+                exit(1)
 
-# convert generated gas prices graph to bytes and send it to the pico
-convert('gas_station_display/e5.png')
-for i in range(15):
-    try:
-        send('image_conversion/out')
-        break
-    except ConnectionRefusedError as error:
-        print(error)
-        sleep(1)
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='Format and send dashboard data to PicoW.')
+    parser.add_argument('--hourly', action='store_true')
+    args = parser.parse_args()
+    main(hourly=args.hourly)
