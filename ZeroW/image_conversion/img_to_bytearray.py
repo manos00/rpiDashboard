@@ -15,7 +15,7 @@ import subprocess
 fileDir = Path(__file__).parent.resolve()
 
 def convert(image):
-    p = subprocess.Popen(['convert', image, '-colorspace', 'gray', '+matte', '-depth', '2', '-colors', '4', '-resize', '280x480!', 'pgm:-'],
+    p = subprocess.Popen(['convert', image, '-colorspace', 'gray', '+matte', '-depth', '2', '-colors', '4', 'pgm:-'], # '-resize', '280x480!',
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT)
     pixels = p.stdout.readlines()[3].decode('utf-8')
@@ -50,7 +50,8 @@ def convert(image):
     return
 
 if __name__ == '__main__':
-    convert('in.jpg')
+    # convert('in.jpg')
+    convert(f'{fileDir}/../gas_station_display/e5.png')
 
 
 # RESOURCES

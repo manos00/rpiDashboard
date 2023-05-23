@@ -92,10 +92,13 @@ def main(*kwargs):
                 epd.image4Gray.hline(0, y, 280, epd.black)
                 y += 8
             else:
-                epd.image4Gray.text(line.strip(), 5, y, epd.black)
+                epd.image4Gray.text(line.strip(), 4, y, epd.black)
                 y += 16
-
+    with open('out', 'rb') as f:
+        graph = f.read()
+        epd.buffer_4Gray[int(y*280/4):int(y*280/4)+len(graph)] = graph
     # Updating uptime and writing to display buffer
+    epd.image4Gray.hline(0, 480-24, 280, epd.black)
     uptimestr = update_uptime()
     epd.image4Gray.text(uptimestr, center_x(uptimestr), 480-16, epd.black)
     # Displaying buffer
@@ -105,14 +108,13 @@ def main(*kwargs):
 
 def every_minute(*kwargs):
     recieve()
-    utime.sleep(1)
+    utime.sleep(2)
     recieve()
     gc.collect()
     main()
     return 
 
 def every_hour(*kwargs):
-    
     return
 
 
@@ -122,11 +124,11 @@ with open('uptime.tmp', 'w') as f:
     f.write(str(t))
     f.close()
 # update everything on boot (timer first executes methods after the first period of time has passed)
-every_hour()
+# every_hour()
 every_minute()
 # Execute main() every 60000 milliseconds / every minute
 timMin.init(period=60_000, mode=Timer.PERIODIC, callback=every_minute)
 # Update weather info every 3600000 milliseconds / every hour
-timHour.init(period=3_600_000, mode=Timer.PERIODIC, callback=every_hour)
+# timHour.init(period=3_600_000, mode=Timer.PERIODIC, callback=every_hour)
 # # Free memory every 1800000 milliseconds / every 30 minutes
 # timGarbage.init(period=1_800_000, mode=Timer.PERIODIC, callback=garbagecollection)

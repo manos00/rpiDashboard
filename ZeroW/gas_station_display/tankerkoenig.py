@@ -76,11 +76,14 @@ def draw_graph(out=f'{fileDir}/e5.png'):
 
     ax.set_xticks([stamps[0], stamps[-1]])
     ax.set_xticklabels([datetime.datetime.fromtimestamp(stamps[0]).strftime('%B %Y'), datetime.datetime.fromtimestamp(stamps[-1]).strftime('%B %Y')])
-    plt.gcf().set_size_inches(2.8, 2)
     plt.margins(0,0)
-    plt.savefig(out, orientation='landscape', bbox_inches='tight', pad_inches=0.0)
+    plt.gcf().set_size_inches(2.89, 2.09)
+    plt.savefig(out, orientation='landscape', pad_inches=0, bbox_inches='tight', dpi = 100) #  
     return
 
 def main():
     update_prices()
     draw_graph()
+
+if __name__ == '__main__':
+    main()
