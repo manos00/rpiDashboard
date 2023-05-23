@@ -54,7 +54,7 @@ def getEvents():
         print('An error occurred: %s' % error)
 
 
-def formatEvents(events: list):
+def formatEvents(events):
     eventstr = ''
     for index, event in enumerate(events):
         start = event['start'].get('dateTime', event['start'].get('date'))
