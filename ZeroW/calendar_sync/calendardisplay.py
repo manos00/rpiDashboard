@@ -58,13 +58,14 @@ def formatEvents(events: list):
     eventstr = ''
     for index, event in enumerate(events):
         start = event['start'].get('dateTime', event['start'].get('date'))
+        eventDate = start.split('-')  
+        eventDate = f'{eventDate[2][:2]}.{eventDate[1]}.{eventDate[0][-2:]}'  
         if 'T' in start:
-            eventTime = start.split('T')
-            eventTime = eventTime[1].split('+')[0]
+            eventTime = start.split('T')[1].split('+')[0][:-3]
         else:
-            eventTime = start.split('-')
-            eventTime = f'{eventTime[2]}-{eventTime[1]}-{eventTime[0][-2:]}'
-        eventstr += eventTime + ' | ' + event['summary']
+            eventTime = 'whole day'
+        eventstr += f"""{eventDate} | {eventTime}
+    {event['summary']}"""
         if index < 2:
             eventstr += '\n'
     return eventstr
@@ -74,7 +75,7 @@ def main():
     if not events:
         print('No events scheduled for today.')
     else:
-        formatEvents(events)
+        print(formatEvents(events))
 
 if __name__ == '__main__':
     main()
