@@ -84,10 +84,10 @@ def main(hourly=False):
 
     # convert generated gas prices graph to bytes and send it to the pico
     if hourly:
-        convert('gas_station_display/e5.png')
+        convert(f'{fileDir}/gas_station_display/e5.png')
     for i in range(15):
         try:
-            send('image_conversion/out')
+            send(f'{fileDir}/image_conversion/out')
             break
         except ConnectionRefusedError as error:
             print(error)
