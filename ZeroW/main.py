@@ -37,13 +37,13 @@ def send(file=None):
     # print(f'Server response: {resp!r}')
     s.close()
 
-def updateNformat(hourly=False):
+def updateNformat(full_update=False):
     # execute methods to get data 
     datestr = update_date()
     calendarEvents = getEvents()
     eventstr = formatEvents(calendarEvents)
     info = [datestr]
-    if hourly:
+    if full_update:
         weatherstr = getWeather()
         update_prices()
         draw_graph()
@@ -66,8 +66,8 @@ def updateNformat(hourly=False):
         f.truncate()
 
 
-def main(hourly=False):
-    updateNformat(hourly=hourly)
+def main(full_update=False):
+    updateNformat(full_update=full_update)
     # send data to pico
     for i in range(15):
         try:
@@ -83,7 +83,7 @@ def main(hourly=False):
     sleep(5)
 
     # convert generated gas prices graph to bytes and send it to the pico
-    if hourly:
+    if full_update:
         convert(f'{fileDir}/gas_station_display/e5.png')
     for i in range(15):
         try:
@@ -100,11 +100,11 @@ def main(hourly=False):
 if __name__ == '__main__':
     # import argparse
     # parser = argparse.ArgumentParser(description='Format and send dashboard data to PicoW.')
-    # parser.add_argument('--hourly', action='store_true')
+    # parser.add_argument('--full_update', action='store_true')
     # args = parser.parse_args()
     if exists(f'{fileDir}/count.txt'):
         with open(f'{fileDir}/count.txt', 'r') as f:
-            count = int(f.read())%60
+            count = int(f.read())%30
         with open(f'{fileDir}/count.txt', 'w') as f:
             f.truncate(0)
             f.write(f'{(count+1)}')
@@ -113,7 +113,7 @@ if __name__ == '__main__':
             f.write('0')
             count = 0
     if count == 0:
-        hourly = True
+        full_update = True
     else:
-        hourly = False
-    main(hourly=hourly)
+        full_update = False                                                                      
+    main(full_update=full_update)
