@@ -65,7 +65,7 @@ def formatEvents(events):
         eventEndDate = f'{eventEndDate[2][:2]}.{eventEndDate[1]}.{eventEndDate[0][-2:]}'
         if 'T' in start:
             eventStartTime = ', ' + start.split('T')[1].split('+')[0][:-3]
-            eventEndTime = ', ' + end.split('T')[1].split('+')[0][:-3]
+            eventEndTime = end.split('T')[1].split('+')[0][:-3]
             if eventStartDate == eventEndDate:
                 eventEndStr = f' - {eventEndTime}'
             else:
