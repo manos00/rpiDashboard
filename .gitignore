@@ -10,5 +10,5 @@ ZeroW/*.log
 ZeroW/count.txt
 */token.json
 *.key
-# */main.py
+readmeLibGen.sh
 *test*
