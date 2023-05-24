@@ -55,16 +55,30 @@ def getEvents():
 
 
 def formatEvents(events):
-    eventstr = '| '
+    eventstr = ''
     for index, event in enumerate(events):
         start = event['start'].get('dateTime', event['start'].get('date'))
-        eventDate = start.split('-')  
-        eventDate = f'{eventDate[2][:2]}.{eventDate[1]}.{eventDate[0][-2:]}'  
+        end = event['end'].get('dateTime', event['end'].get('date'))
+        eventStartDate = start.split('-')  
+        eventStartDate = f'{eventStartDate[2][:2]}.{eventStartDate[1]}.{eventStartDate[0][-2:]}'
+        eventEndDate = start.split('-')  
+        eventEndDate = f'{eventStartDate[2][:2]}.{eventStartDate[1]}.{eventStartDate[0][-2:]}'
         if 'T' in start:
-            eventTime = ' | ' + start.split('T')[1].split('+')[0][:-3]
+            eventStartTime = ', ' + start.split('T')[1].split('+')[0][:-3]
+            eventEndTime = ', ' + end.split('T')[1].split('+')[0][:-3]
+            if eventStartDate == eventEndDate:
+                eventEndStr = f' - {eventEndTime}'
+            else:
+                eventEndStr = f' - {eventEndDate}, {eventEndTime}'
         else:
-            eventTime = ''
-        eventstr += f"""{eventDate}{eventTime}
+            eventStartTime = ''
+            eventEndTime = ''
+            if eventStartDate == eventEndDate:
+                eventEndStr = ''
+            else:
+                eventEndStr = f' - {eventEndDate}'
+        eventStartStr = f'{eventStartDate}{eventStartTime}'
+        eventstr += f"""{eventStartStr}{eventEndStr}
     {event['summary']}"""
         if index < 2:
             eventstr += '\n'
