@@ -51,7 +51,7 @@ def recieve():
             if not bytes_read:
                 break
             f.write(bytes_read)
-            client_socket.sendall(b'Data recieved successfully.')
+            # client_socket.sendall(b'Data recieved successfully.')
     client_socket.close()
     s.close()
 

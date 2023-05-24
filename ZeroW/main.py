@@ -33,8 +33,8 @@ def send(file=None):
             if not bytes_read:
                 break
             s.sendall(bytes_read)
-            resp = s.recv(BUFFER_SIZE)
-    print(f'Server response: {resp!r}')
+        # resp = s.recv(BUFFER_SIZE)
+    # print(f'Server response: {resp!r}')
     s.close()
 
 def updateNformat(hourly=False):
