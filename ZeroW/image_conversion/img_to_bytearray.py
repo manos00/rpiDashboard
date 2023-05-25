@@ -15,8 +15,7 @@ import subprocess
 fileDir = Path(__file__).parent.resolve()
 
 def convert(image):
-    p = subprocess.Popen(['convert', image, '-colorspace', 'gray', '+matte', '-depth', '2', '-colors', '4', 'pgm:-'], # '-resize', '280x480!',
-                         stdout=subprocess.PIPE,
+    p = subprocess.Popen(['convert', image, '-colorspace', 'gray', '+matte', '-depth', '2', '-colors', '4', '-resize', '280x200!', 'pgm:-'], 
                          stderr=subprocess.STDOUT)
     pixels = p.stdout.readlines()[3].decode('utf-8')
     colours = [] # enumerate 4 gray levels
