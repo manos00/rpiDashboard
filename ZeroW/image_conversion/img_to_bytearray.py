@@ -10,13 +10,14 @@
 
 import sys
 from pathlib import Path
+import time
 import subprocess
 
 fileDir = Path(__file__).parent.resolve()
 
 def convert(image):
     p = subprocess.Popen(['convert', image, '-colorspace', 'gray', '+matte', '-depth', '2', '-colors', '4', '-resize', '280x200!', 'pgm:-'], 
-                         stderr=subprocess.STDOUT)
+                         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
     pixels = p.stdout.readlines()[3].decode('utf-8')
     colours = [] # enumerate 4 gray levels
     for p in pixels:
