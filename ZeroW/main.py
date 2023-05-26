@@ -8,6 +8,7 @@ from os.path import getsize, exists
 from os import SEEK_END
 from time import sleep
 from pathlib import Path
+import threading as th
 
 fileDir = Path(__file__).parent.resolve()
 
@@ -66,7 +67,21 @@ def updateNformat(full_update=False):
         f.truncate()
 
 
-def main(full_update=False):
+def main():
+    if exists(f'{fileDir}/count.txt'):
+        with open(f'{fileDir}/count.txt', 'r') as f:
+            count = int(f.read())%30
+        with open(f'{fileDir}/count.txt', 'w') as f:
+            f.truncate(0)
+            f.write(f'{(count+1)}')
+    else:
+        with open(f'{fileDir}/count.txt', 'w') as f:
+            f.write('0')
+            count = 0
+    if count == 0:
+        full_update = True
+    else:
+        full_update = False        
     updateNformat(full_update=full_update)
     # send data to pico
     for i in range(15):
@@ -102,18 +117,10 @@ if __name__ == '__main__':
     # parser = argparse.ArgumentParser(description='Format and send dashboard data to PicoW.')
     # parser.add_argument('--full_update', action='store_true')
     # args = parser.parse_args()
-    if exists(f'{fileDir}/count.txt'):
-        with open(f'{fileDir}/count.txt', 'r') as f:
-            count = int(f.read())%30
-        with open(f'{fileDir}/count.txt', 'w') as f:
-            f.truncate(0)
-            f.write(f'{(count+1)}')
-    else:
-        with open(f'{fileDir}/count.txt', 'w') as f:
-            f.write('0')
-            count = 0
-    if count == 0:
-        full_update = True
-    else:
-        full_update = False                                                                      
-    main(full_update=full_update)
+    
+    class RepeatTimer(th.Timer):  
+        def run(self):  
+            while not self.finished.wait(self.interval):  
+                self.function(*self.args,**self.kwargs)
+    timer = RepeatTimer(1, main)
+    timer.start()
