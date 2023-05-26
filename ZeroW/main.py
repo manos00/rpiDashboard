@@ -84,32 +84,30 @@ def main():
         full_update = False        
     updateNformat(full_update=full_update)
     # send data to pico
-    for i in range(15):
+    for i in range(10):
         try:
             send(f'{fileDir}/formattedData.txt')
             break
         except ConnectionRefusedError as error:
             print(error)
             sleep(1)
-            if i == 14:
+            if i == 9:
                 print('bruh moment')
-                exit(1)
 
     sleep(5)
 
     # convert generated gas prices graph to bytes and send it to the pico
     if full_update:
         convert(f'{fileDir}/gas_station_display/e5.png')
-    for i in range(15):
+    for i in range(10):
         try:
             send(f'{fileDir}/image_conversion/out')
             break
         except ConnectionRefusedError as error:
             print(error)
             sleep(1)
-            if i == 14:
+            if i == 9:
                 print('bruh moment 2')
-                exit(1)
 
 
 if __name__ == '__main__':
