@@ -120,5 +120,5 @@ if __name__ == '__main__':
         def run(self):  
             while not self.finished.wait(self.interval):  
                 self.function(*self.args,**self.kwargs)
-    timer = RepeatTimer(1, main)
+    timer = RepeatTimer(60, main)
     timer.start()
