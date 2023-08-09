@@ -18,7 +18,7 @@ def send(file=None):
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = "192.168.178.112"
-    port = 420
+    port = 30123
     print(f"[+] Connecting to {host}:{port}")
     s.connect((host, port))
     print("[+] Connected to ", host)

@@ -26,7 +26,7 @@ def center_x(str: str):
 
 def recieve():
     SERVER_HOST = "" # 192.168.178.112
-    SERVER_PORT = 420
+    SERVER_PORT = 30123
     BUFFER_SIZE = 4096
     SEPARATOR = "<SEPARATOR>"
 
